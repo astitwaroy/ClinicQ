@@ -5,7 +5,7 @@ nobody can tell them when their turn will come. ClinicQ lets patients **take a t
 their place in line live**, so they can wait at home or nearby. The reception desk calls the next patient with one
 tap, and a TV in the waiting room shows who is being seen.
 
-**Live demo:** _add your Render URL here after deploying_ · demo desk login `demo@clinicq.app` / `demo1234`
+**Live demo:** https://clinicq-84sn.onrender.com (free hosting: the first visit after a quiet spell takes up to a minute to wake up) · demo desk login `demo@clinicq.app` / `demo1234`
 
 | Patient's phone | Called! | Waiting-room TV |
 |---|---|---|
