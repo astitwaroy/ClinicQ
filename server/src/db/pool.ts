@@ -10,8 +10,22 @@ pg.types.setTypeParser(20, (v) => Number(v));
 
 const needsSsl = /sslmode=require|neon\.tech|render\.com/.test(config.databaseUrl);
 
+/**
+ * TLS is configured below, so drop libpq-style TLS options from the URL. Neon's strings end in
+ * `?sslmode=require&channel_binding=require`; node-postgres would otherwise apply its own (stricter)
+ * reading of sslmode.
+ */
+export function cleanDatabaseUrl(raw: string): string {
+  const q = raw.indexOf('?');
+  if (q === -1) return raw;
+  const params = new URLSearchParams(raw.slice(q + 1));
+  for (const k of ['sslmode', 'channel_binding', 'sslrootcert']) params.delete(k);
+  const rest = params.toString();
+  return raw.slice(0, q) + (rest ? `?${rest}` : '');
+}
+
 export const pool = new pg.Pool({
-  connectionString: config.databaseUrl.replace(/[?&]sslmode=require/, ''),
+  connectionString: cleanDatabaseUrl(config.databaseUrl),
   ssl: needsSsl ? { rejectUnauthorized: false } : undefined,
   max: 10,
   idleTimeoutMillis: 30_000,
